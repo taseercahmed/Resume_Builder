@@ -1,17 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
     tools:context=".home.fragments.MainHomefragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolid"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:title="Resume Maker"
+            android:background="@color/teal_200"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolid">
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout_home"
+                style="@style/CustomTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#fcfcfc"
+                android:elevation="6dp"
+                android:stateListAnimator="@null"
+                android:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tabIndicatorHeight="0dp"
+                app:tabRippleColor="@null"
+                app:tabSelectedTextColor="@color/paid_green"
+                app:tabTextAppearance="@style/MineCustomTabText">
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/headingtab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Headings:"
+                    android:textAlignment="center"
+                    android:drawableLeft="@drawable/circle"
+                    android:icon="@drawable/circle">
+
+                </com.google.android.material.tabs.TabItem>
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/workhistorytab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Work History"
+                    android:textAlignment="center"
+                    android:drawableLeft="@drawable/circle"
+                    android:icon="@drawable/circle">
+
+                </com.google.android.material.tabs.TabItem>
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/educationtab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Education:"
+                    android:textAlignment="center"
+                    android:drawableLeft="@drawable/circle"
+                    android:icon="@drawable/circle">
+
+                </com.google.android.material.tabs.TabItem>
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/experienceab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Experience:"
+                    android:textAlignment="center"
+                    android:drawableLeft="@drawable/circle"
+                    android:icon="@drawable/circle">
+
+                </com.google.android.material.tabs.TabItem>
+            </com.google.android.material.tabs.TabLayout>
+
+            <View
+                android:id="@+id/tab_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#F4F2F2"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/tabLayout_home" />
+
+            <FrameLayout
+                android:id="@+id/fragmentcontainer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tab_shadow"></FrameLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>
