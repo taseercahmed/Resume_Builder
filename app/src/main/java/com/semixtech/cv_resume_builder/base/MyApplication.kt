@@ -13,6 +13,10 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LifecycleOwner
+import com.qurantranslationapp.di.viewmodelmodule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 
 
 class MyApplication : Application() {
@@ -35,17 +39,18 @@ class MyApplication : Application() {
         mInstance = this
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        val isDebuggable = 0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE
 
 
-//        if (!isDebuggable) {
-//            Smartlook.setupAndStartRecording("a29b54bd5b40c0f899854364aa2a9fd1a293bacf");
-//        }
-//
-//        Picasso.setSingletonInstance(
-//            Picasso.Builder(this) // additional settings
-//                .build()
-//        )
+        startKoin {
+            androidContext(this@MyApplication)
+            modules(
+                listOf(
+
+                    viewmodelmodule,
+
+
+                    ))
+        }
     }
 
     fun setLifeCylceOwner(lifecycleOwner: LifecycleOwner) {

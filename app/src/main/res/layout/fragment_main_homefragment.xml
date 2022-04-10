@@ -24,90 +24,270 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolid">
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout_home"
-                style="@style/CustomTabLayout"
+<HorizontalScrollView
+    android:id="@+id/horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginTop="10dp"
+    tools:ignore="MissingConstraints">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tabLayout_home"
+            style="@style/CustomTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fcfcfc"
+            android:elevation="6dp"
+            android:stateListAnimator="@null"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabIndicatorHeight="0dp"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/paid_green"
+            app:tabTextAppearance="@style/MineCustomTabText">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/headingconstarint"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#fcfcfc"
-                android:elevation="6dp"
-                android:stateListAnimator="@null"
-                android:visibility="visible"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@color/grey_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:tabIndicatorHeight="0dp"
-                app:tabRippleColor="@null"
-                app:tabSelectedTextColor="@color/paid_green"
-                app:tabTextAppearance="@style/MineCustomTabText">
-                <com.google.android.material.tabs.TabItem
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textno"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                     android:textSize="10sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/headingtab"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/headingtab">
+                    ></TextView>
+
+                <TextView
                     android:id="@+id/headingtab"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Headings:"
-                    android:textAlignment="center"
-                    android:drawableLeft="@drawable/circle"
-                    android:icon="@drawable/circle">
 
-                </com.google.android.material.tabs.TabItem>
-                <com.google.android.material.tabs.TabItem
+                    android:layout_marginLeft="8dp"
+
+                    android:text="Headings"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@drawable/button_bg"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toEndOf="@+id/textno">
+
+                </TextView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/historyconstarint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@color/grey_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/headingconstarint"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textno1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/workhistorytab"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/workhistorytab">
+                    ></TextView>
+
+                <TextView
                     android:id="@+id/workhistorytab"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:text="Work History"
+                    android:textStyle="bold"
                     android:textAlignment="center"
-                    android:drawableLeft="@drawable/circle"
-                    android:icon="@drawable/circle">
+                    android:textColor="@color/light_grey"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toEndOf="@+id/textno1">
 
-                </com.google.android.material.tabs.TabItem>
-                <com.google.android.material.tabs.TabItem
+                </TextView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/educationconstarint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@color/grey_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/historyconstarint"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textno2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/educationtab"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/educationtab">
+                    ></TextView>
+
+                <TextView
                     android:id="@+id/educationtab"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Education:"
+                    android:layout_marginLeft="8dp"
+                    android:text="Education"
+                    android:textStyle="bold"
                     android:textAlignment="center"
-                    android:drawableLeft="@drawable/circle"
-                    android:icon="@drawable/circle">
+                    android:textColor="@color/light_grey"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toEndOf="@+id/textno2">
 
-                </com.google.android.material.tabs.TabItem>
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/experienceab"
+                </TextView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/experienceconstarint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@color/grey_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/educationconstarint"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textno3"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/circle"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/experiencetab"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/experiencetab">
+                    ></TextView>
+
+                <TextView
+                    android:id="@+id/experiencetab"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Experience:"
+                    android:layout_marginLeft="8dp"
+                    android:text="Experience"
+                    android:textStyle="bold"
                     android:textAlignment="center"
-                    android:drawableLeft="@drawable/circle"
-                    android:icon="@drawable/circle">
+                    android:textColor="@color/light_grey"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toEndOf="@+id/textno3">
 
-                </com.google.android.material.tabs.TabItem>
-            </com.google.android.material.tabs.TabLayout>
+                </TextView>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</HorizontalScrollView>
             <View
                 android:id="@+id/tab_shadow"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#F4F2F2"
                 android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@+id/tabLayout_home" />
+                app:layout_constraintTop_toBottomOf="@+id/horizontal" />
 
-            <FrameLayout
-                android:id="@+id/fragmentcontainer"
+
+            <include
+                android:id="@+id/headinglayout"
+                layout="@layout/fragment_heading"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tab_shadow"></FrameLayout>
+                app:layout_constraintTop_toBottomOf="@+id/horizontal"
+                app:layout_constraintVertical_bias="1.0"></include>
 
+            <include
+                android:id="@+id/workhistorylayout"
+                layout="@layout/fragment_workhistory"
+                android:layout_width="match_parent"
+                 android:visibility="gone"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal"></include>
+            <include
+                android:id="@+id/educationlayout"
+                layout="@layout/educationlayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal"
+                ></include>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
 </layout>

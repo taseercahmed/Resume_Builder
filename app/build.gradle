@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -45,6 +46,48 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.databinding:databinding-runtime:4.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+
+    def room_version = "2.3.0"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-RC3'
+
+    def retrofit_version = '2.6.1'
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4"
+    // okhttp
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+
+    implementation 'io.insert-koin:koin-core:3.1.5'
+    // Testing
+    testImplementation 'io.insert-koin:koin-test:3.1.5'
+    // Java Compatibility
+    implementation "io.insert-koin:koin-android-compat:3.1.5"
+// Jetpack WorkManager
+    implementation "io.insert-koin:koin-androidx-workmanager:3.1.5"
+// Navigation Graph
+    implementation "io.insert-koin:koin-androidx-navigation:3.1.5"
+// Jetpack Compose
+    implementation "io.insert-koin:koin-androidx-compose:3.1.5"
+    implementation "io.insert-koin:koin-ktor:3.1.5"
+// SLF4J Logger
+    implementation "io.insert-koin:koin-logger-slf4j:3.1.5"
+
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

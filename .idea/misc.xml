@@ -11,10 +11,15 @@
         <entry key="..\:/Resume_Builder/app/src/main/res/layout/custom_dialog_design.xml" value="0.27291666666666664" />
         <entry key="..\:/Resume_Builder/app/src/main/res/layout/custom_tab_item_design.xml" value="0.26871794871794874" />
         <entry key="..\:/Resume_Builder/app/src/main/res/layout/fragment_main_homefragment.xml" value="0.26871794871794874" />
+        <entry key="..\:/Users/dell/.gradle/caches/transforms-3/7c35e9ced6058ee9ee419dce8130dd8e/transformed/appcompat-1.4.1/res/drawable/abc_item_background_holo_dark.xml" value="0.1145" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/drawable/button_bg.xml" value="0.1" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/activity_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/custom_dialog_design.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/custom_tab_item_design.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_heading.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_main_homefragment.xml" value="0.1" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/educationlayout.xml" value="0.22" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_heading.xml" value="0.22" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_main_homefragment.xml" value="0.2" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_workhistory.xml" value="0.25" />
       </map>
     </option>
   </component>
