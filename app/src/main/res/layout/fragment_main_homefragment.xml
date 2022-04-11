@@ -95,7 +95,7 @@
                     android:text="Headings"
                     android:textStyle="bold"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/dark_grey"
                     android:textColorHighlight="@drawable/button_bg"
                     android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@+id/textno">
@@ -253,6 +253,7 @@
                 layout="@layout/fragment_heading"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -276,6 +277,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal"
+                ></include>
+            <include
+                android:id="@+id/educationrecycler"
+                layout="@layout/education"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -16,10 +16,12 @@
         <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/activity_home.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/custom_dialog_design.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/custom_tab_item_design.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/educationlayout.xml" value="0.22" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/degreerecordlayout.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/educationlayout.xml" value="0.1" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/educationrecycler.xml" value="0.22" />
         <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_heading.xml" value="0.22" />
-        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_main_homefragment.xml" value="0.2" />
-        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_workhistory.xml" value="0.25" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_main_homefragment.xml" value="0.18" />
+        <entry key="..\:/Users/dell/AndroidStudioProjects/Resume_Builder/app/src/main/res/layout/fragment_workhistory.xml" value="0.1991701244813278" />
       </map>
     </option>
   </component>

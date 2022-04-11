@@ -17,6 +17,7 @@ import com.semixtech.cv_resume_builder.databinding.ActivityHomeBinding
 import com.semixtech.cv_resume_builder.helper.ClickHandler
 import com.semixtech.cv_resume_builder.helper.SectionsPagerAdapter
 import com.semixtech.cv_resume_builder.home.fragments.MainHomefragment
+import com.semixtech.cv_resume_builder.home.fragments.WorkhistoryFragment
 
 class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.OnPageChangeListener {
 
@@ -100,7 +101,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
 
     private fun setupViewPager(viewPager: ViewPager?) {
         adapter.addFragment(MainHomefragment(), "Edit")
-        adapter.addFragment(MainHomefragment(), "Preview")
+        adapter.addFragment(WorkhistoryFragment(), "Preview")
         adapter.addFragment(MainHomefragment(), "Saved CV")
         viewPager!!.adapter = adapter
     }

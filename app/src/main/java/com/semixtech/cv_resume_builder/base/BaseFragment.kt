@@ -16,6 +16,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.semixtech.cv_resume_builder.R
 import com.semixtech.cv_resume_builder.helper.CustomDialog
@@ -154,4 +156,5 @@ abstract class BaseFramnet<DB : ViewDataBinding?> : Fragment(),
         return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
             .isConnected
     }
-}
+
+   }
