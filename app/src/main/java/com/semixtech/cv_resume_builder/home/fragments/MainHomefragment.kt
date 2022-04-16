@@ -1,180 +1,104 @@
 package com.semixtech.cv_resume_builder.home.fragments
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.ClipDrawable.VERTICAL
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
-import com.google.android.material.textfield.TextInputEditText
 import com.semixtech.cv_resume_builder.R
 import com.semixtech.cv_resume_builder.base.BaseFramnet
 import com.semixtech.cv_resume_builder.databinding.FragmentMainHomefragmentBinding
 import com.semixtech.cv_resume_builder.db.Entity.UserEducationEntity
 import com.semixtech.cv_resume_builder.db.Entity.UserEntity
 import com.semixtech.cv_resume_builder.db.Entity.UserHistoryEntity
-import com.semixtech.cv_resume_builder.home.EducationAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 import com.semixtech.cv_resume_builder.kotlinwork.viewmodel.MainViewModel
+import com.semixtech.cv_resume_builder.home.adapter.RecyclerViewAdapter
 
 
-class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(),EducationAdapter.RowClickListner  {
-
-    var name1:TextInputEditText?=null
-    var name2:TextInputEditText?=null
-    var profession:TextInputEditText?=null
-    var city1:TextInputEditText?=null
-    var country1:TextInputEditText?=null
-    var postalcode1:TextInputEditText?=null
-    var phone:TextInputEditText?=null
-    var email1:TextInputEditText?=null
-    var button1:Button?=null
-    var button2:Button?=null
-    var button3:Button?=null
-    var button4:Button?=null
-    var SaveButton:Button?=null
-    var SaveHistory:Button?=null
-    var constraintLayout1:ConstraintLayout?=null
-    var constraintLayout2:ConstraintLayout?=null
-    var constraintLayout3:ConstraintLayout?=null
-    var constraintLayout4:ConstraintLayout?=null
-
- //  private lateinit var userviewModel: MainViewModel
-    private val userviewModel: MainViewModel by viewModel()
-    var job:TextInputEditText?=null
-    var Employee:TextInputEditText?=null
-    var city:TextInputEditText?=null
-    var country:TextInputEditText?=null
-    var startd:TextInputEditText?=null
-    var endd:TextInputEditText?=null
-    private lateinit var linearLayoutManager: LinearLayoutManager
-    var educationAdapter: EducationAdapter?=null
-    var recyclerView:RecyclerView?=null
-
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-
-
-
-    }
-    override fun OnCreateView(inflater: LayoutInflater?, savedInstanceState: Bundle?) {
-    }
+class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), RecyclerViewAdapter.RowClickListener
+{
+    lateinit var recyclerViewAdapter: RecyclerViewAdapter
+    lateinit var viewModel: MainViewModel
     @SuppressLint("ResourceAsColor")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        linearLayoutManager = LinearLayoutManager(requireContext())
+    override fun OnCreateView(inflater: LayoutInflater?, savedInstanceState: Bundle?) {
 
-       dataBinding!!.educationrecycler!!.apply {
+        dataBinding!!.educationrecycler.recyclerView!!.apply {
 
-            educationAdapter= EducationAdapter(this@MainHomefragment)
-        //    adapter=educationAdapter
-//            val divider=DividerItemDecoration(context,VERTICAL)
-//            addItemDecoration(divider)
+            layoutManager = LinearLayoutManager(requireContext())
+            recyclerViewAdapter = RecyclerViewAdapter(this@MainHomefragment)
+            adapter = recyclerViewAdapter
+            val divider = DividerItemDecoration(requireContext(), StaggeredGridLayoutManager.VERTICAL)
+            addItemDecoration(divider)
+
         }
-        //Without ViewModelFactory
-      //  userviewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        userviewModel.getUsereducationObservers().observe(viewLifecycleOwner, Observer
-        {
-            educationAdapter!!.setListData(ArrayList(it))
-            educationAdapter!!.notifyDataSetChanged()
+        viewModel = ViewModelProviders.of(this!!)[MainViewModel::class.java]
+        viewModel.getUsereducationObservers().observe(this, Observer {
+            recyclerViewAdapter.setListData(ArrayList(it))
+            recyclerViewAdapter.notifyDataSetChanged()
         })
-        constraintLayout1=view.findViewById(R.id.headinglayout)
-        constraintLayout2=view.findViewById(R.id.workhistorylayout)
-        constraintLayout3=view.findViewById(R.id.educationlayout)
-//        constraintLayout4 =view.findViewById(R.id.educationrecycler)
         dataBinding!!.workhistorytab!!.setEnabled(false)
         dataBinding!!.educationtab!!.setEnabled(false)
         dataBinding!!.experiencetab!!.setEnabled(false)
         dataBinding!!.headingtab!!.setOnClickListener(View.OnClickListener {
-            constraintLayout1!!.setVisibility(View.VISIBLE)
-            constraintLayout2!!.setVisibility(View.GONE)
-            constraintLayout3!!.setVisibility(View.GONE)
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.VISIBLE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
         })
 
         dataBinding!!.workhistorytab!!.setOnClickListener(View.OnClickListener {
-            constraintLayout1!!.setVisibility(View.GONE)
-            constraintLayout2!!.setVisibility(View.VISIBLE)
-            constraintLayout3!!.setVisibility(View.GONE)
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.VISIBLE)
+            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
         })
         dataBinding!!.educationtab!!.setOnClickListener(View.OnClickListener {
-            constraintLayout1!!.setVisibility(View.GONE)
-            constraintLayout2!!.setVisibility(View.GONE)
-            constraintLayout3!!.setVisibility(View.VISIBLE)
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.VISIBLE)
         })
 
         dataBinding!!.headinglayout.button1!!.setOnClickListener(View.OnClickListener {
             addData()
 
-            constraintLayout1!!.setVisibility(View.GONE)
-            constraintLayout2!!.setVisibility(View.VISIBLE)
-
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.VISIBLE)
+            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
             dataBinding!!.workhistorytab!!.setEnabled(true)
             dataBinding!!.workhistorytab.setTextColor(R.color.black_text_color)
-            constraintLayout3!!.setVisibility(View.GONE)
+
 
         })
         dataBinding!!.workhistorylayout.historybtn.setOnClickListener(View.OnClickListener {
             addHistory()
-            constraintLayout1!!.setVisibility(View.GONE)
-            constraintLayout2!!.setVisibility(View.GONE)
-            constraintLayout3!!.setVisibility(View.VISIBLE)
-            dataBinding!!.educationrecycler.rcyclerview.setVisibility(View.GONE)
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.VISIBLE)
+
             dataBinding!!.educationtab!!.setEnabled(false)
             dataBinding!!.educationtab.setTextColor(R.color.black_text_color)
         })
 
         dataBinding!!.educationlayout.educationbtn.setOnClickListener(View.OnClickListener {
             addEducation()
-            constraintLayout1!!.setVisibility(View.GONE)
-            constraintLayout2!!.setVisibility(View.GONE)
-            constraintLayout3!!.setVisibility(View.GONE)
-            dataBinding!!.educationrecycler.rcyclerview.setVisibility(View.VISIBLE)
-            dataBinding!!.experiencetab!!.setEnabled(false)
-            dataBinding!!.experiencetab.setTextColor(R.color.black_text_color)
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
+            dataBinding!!.educationrecycler.educationrec.setVisibility(View.VISIBLE)
+
         })
     }
 
+    override fun getlayout(): Int {
+        return R.layout.fragment_main_homefragment
+    }
 
-    //    fun heading(view: View)
-//    {
-//
-//
-//        name2=view.findViewById(R.id.name2)
-//        profession=view.findViewById(R.id.profession1)
-//        city1=view.findViewById(R.id.city1)
-//        country1=view.findViewById(R.id.country1)
-//        postalcode1=view.findViewById(R.id.postalcode1)
-//        phone=view.findViewById(R.id.phone1)
-//        email1=view.findViewById(R.id.emailid)
-////        button1=view.findViewById(R.id.headingtab)
-////        SaveButton=view.findViewById(R.id.button1)
-////        button2=view.findViewById(R.id.workhistorytab)
-////        button3=view.findViewById(R.id.educationtab)
-////        button4=view.findViewById(R.id.experiencetab)
-//    }
-//    fun history(view: View)
-//    {
-//        job=view.findViewById(R.id.jobid)
-//        Employee=view.findViewById(R.id.employeeid)
-//        city=view.findViewById(R.id.muncipiltyid)
-//        country=view.findViewById(R.id.Countryid)
-//        startd=view.findViewById(R.id.StartDateid)
-//        endd=view.findViewById(R.id.EndDateid)
-//        SaveHistory=view.findViewById(R.id.historybtn)
-//    }
     fun addData(){
         var firstname=dataBinding!!.headinglayout.firstname!!.text.toString()
         var secondname=dataBinding!!.headinglayout.name2!!.text.toString()
@@ -184,14 +108,14 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(),Educatio
         var postalcode=dataBinding!!.headinglayout.postalcode1!!.text.toString()
         var phone1=dataBinding!!.headinglayout.phone1!!.text.toString()
         var email=dataBinding!!.headinglayout.emailid!!.text.toString()
-          if(firstname.isNullOrEmpty()){
-              dataBinding!!.headinglayout.firstname!!.setError("FirstName is Required")
-              return
-          }
+        if(firstname.isNullOrEmpty()){
+            dataBinding!!.headinglayout.firstname!!.setError("FirstName is Required")
+            return
+        }
 
 
         val user= UserEntity(phone1,firstname,secondname,profession1,city,country,postalcode,email)
-        userviewModel.insertUserInfo(user,requireContext())
+        viewModel.insertUserInfo(user,requireContext())
 
     }
     fun addHistory()
@@ -208,42 +132,67 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(),Educatio
         }
 
         val user= UserHistoryEntity(0,jobtitle,Employer,City,Country,startdate,enddate,"")
-        userviewModel.insertUserHistory(user,requireContext())
+        viewModel.insertUserHistory(user,requireContext())
 
     }
+
     fun addEducation()
     {
-        val SchoolName=dataBinding!!.educationlayout.SchoolName!!.text.toString()
+        val SchoolName=dataBinding!!.educationlayout.schoolname!!.text.toString()
         val SchoolLocation=dataBinding!!.educationlayout.SchoolLocation!!.text.toString()
         val Degree=dataBinding!!.educationlayout.Degree!!.text.toString()
         val FieldofStudy=dataBinding!!.educationlayout.FieldofStudy!!.text.toString()
         val StartDate=dataBinding!!.educationlayout.GraduationStartDate!!.text.toString()
         val EndDate=dataBinding!!.educationlayout.GraduationEndDate!!.text.toString()
-         val CurrentlyWork=dataBinding!!.educationlayout.checkedTextView.text.toString()
+        val CurrentlyWork=dataBinding!!.educationlayout.checkedTextView.text.toString()
         if( SchoolName.isNullOrEmpty()){
-            dataBinding!!.headinglayout.firstname!!.setError("FirstName is Required")
+            dataBinding!!.educationlayout.schoolname!!.setError("FirstName is Required")
             return
         }
-        val user= UserEducationEntity(0,SchoolName,SchoolLocation,Degree,FieldofStudy,StartDate,EndDate,CurrentlyWork)
-        userviewModel.insertUserEducation(user,requireContext())
 
-    }
+        if(dataBinding!!.educationlayout.educationbtn.text.equals("Next"))
+        {
+            val user= UserEducationEntity(0,SchoolName,SchoolLocation,Degree,FieldofStudy,StartDate,EndDate,CurrentlyWork)
+            viewModel.insertUserEducation(user,requireContext())
 
-    override fun getlayout(): Int {
-         return R.layout.fragment_main_homefragment
-    }
-
-    override fun onDeleteUserClickListner(user: UserEducationEntity) {
-        context?.let {
-            userviewModel.deleteUserEducation(user, it)
+        } else {
+            val user= UserEducationEntity(  dataBinding!!.educationlayout.schoolname.getTag(dataBinding!!.educationlayout.schoolname.id).toString().toInt()
+                ,SchoolName,SchoolLocation,Degree,FieldofStudy,StartDate,EndDate,CurrentlyWork)
+            viewModel.updateUserEducation(user,requireContext())
+            dataBinding!!.educationlayout.educationbtn.setText("Next")
         }
+
+        dataBinding!!.educationlayout.schoolname.setText("")
+        dataBinding!!.educationlayout.SchoolLocation.setText("")
+        dataBinding!!.educationlayout.Degree.setText("")
+        dataBinding!!.educationlayout.FieldofStudy.setText("")
+        dataBinding!!.educationlayout.GraduationStartDate.setText("")
+        dataBinding!!.educationlayout.GraduationEndDate.setText("")
+
     }
 
-    override fun onItemClickListner(user: UserEducationEntity) {
-        TODO("Not yet implemented")
+    override fun onDeleteUserClickListener(user: UserEducationEntity) {
+        viewModel.deleteUserEducation(user,requireContext())
     }
 
+    override fun onEditClickListener(user: UserEducationEntity)
+    {
+        dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+        dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+        dataBinding!!.educationlayout.education.setVisibility(View.VISIBLE)
+        dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
+
+        dataBinding!!.educationlayout.schoolname.setText(user.SchoolName)
+        dataBinding!!.educationlayout.SchoolLocation.setText(user.SchoolLocation)
+        dataBinding!!.educationlayout.Degree.setText(user.Degree)
+        dataBinding!!.educationlayout.FieldofStudy.setText(user.FieldofStudy)
+        dataBinding!!.educationlayout.GraduationStartDate.setText(user.StartDate)
+        dataBinding!!.educationlayout.GraduationEndDate.setText(user.EndDate)
+        dataBinding!!.educationlayout.schoolname.setTag(dataBinding!!.educationlayout.schoolname.id,user._id)
+
+        dataBinding!!.educationlayout.educationbtn.setText("Update")
 
 
 
-}
+    }
+   }

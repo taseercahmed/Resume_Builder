@@ -13,10 +13,8 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LifecycleOwner
-import com.qurantranslationapp.di.viewmodelmodule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
+
+
 
 
 class MyApplication : Application() {
@@ -41,16 +39,16 @@ class MyApplication : Application() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
 
-        startKoin {
-            androidContext(this@MyApplication)
-            modules(
-                listOf(
-
-                    viewmodelmodule,
-
-
-                    ))
-        }
+//        startKoin {
+//            androidContext(this@MyApplication)
+//            modules(
+//                listOf(
+//
+//                    viewmodelmodule,
+//
+//
+//                    ))
+//        }
     }
 
     fun setLifeCylceOwner(lifecycleOwner: LifecycleOwner) {
