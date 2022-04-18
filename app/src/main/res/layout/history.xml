@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/historyrec">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cs"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/dname"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:hint="Name"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></EditText>
+
+            <EditText
+                android:id="@+id/date"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:hint="Name"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/address"
+                app:layout_constraintStart_toEndOf="@+id/dname"
+                app:layout_constraintTop_toTopOf="parent"></EditText>
+
+
+            <EditText
+                android:id="@+id/enddate"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:hint="EndDate"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/address"
+                app:layout_constraintStart_toStartOf="@+id/dname"
+                app:layout_constraintTop_toBottomOf="@+id/dname"></EditText>
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:hint="Address"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/enddate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/enddate"
+                app:layout_constraintTop_toTopOf="@+id/enddate"></EditText>
+            <EditText
+                android:id="@+id/studyfield"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:hint="StudyField"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/scln"
+                app:layout_constraintStart_toStartOf="@+id/enddate"
+                app:layout_constraintTop_toBottomOf="@+id/enddate"></EditText>
+
+            <EditText
+                android:id="@+id/scln"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:hint="Address"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/studyfield"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/studyfield"
+                app:layout_constraintTop_toTopOf="@+id/studyfield"></EditText>
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Save"
+                app:layout_constraintEnd_toEndOf="@+id/scln"
+
+                app:layout_constraintStart_toStartOf="@id/studyfield"
+
+                app:layout_constraintTop_toBottomOf="@id/studyfield"
+                tools:ignore="MissingConstraints" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:text="Work History summary"
+            android:textColor="@color/teal_200"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/floatingBackButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cs"></TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/bckhistorybutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <Button
+            android:id="@+id/bckhistorybutton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/teal_200"
+            android:text="Back"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/recyclerView1">
+
+        </Button>
+
+        <Button
+            android:id="@+id/nexthistorybutton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/teal_200"
+            android:text="Next"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/recyclerView1">
+
+        </Button>
+
+        <Button
+            android:id="@+id/floatingBackButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:layout_margin="5dp"
+            android:background="@android:drawable/ic_menu_add"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView2"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
