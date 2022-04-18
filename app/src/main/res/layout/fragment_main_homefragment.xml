@@ -212,17 +212,17 @@
                     android:textAlignment="center"
                     android:textColor="@color/dark_grey"
                     android:textSize="10dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/experiencetab"
+                    app:layout_constraintBottom_toBottomOf="@+id/skillstab"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/experiencetab">
+                    app:layout_constraintTop_toTopOf="@+id/skillstab">
                     ></TextView>
 
                 <TextView
-                    android:id="@+id/experiencetab"
+                    android:id="@+id/skillstab"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="Experience"
+                    android:text="Skills"
                     android:textStyle="bold"
                     android:textAlignment="center"
                     android:textColor="@color/light_grey"
@@ -285,6 +285,17 @@
             <include
                 android:id="@+id/educationrecycler"
                 layout="@layout/education"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal"
+                ></include>
+            <include
+                android:id="@+id/historyrecycler"
+                layout="@layout/history"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:visibility="gone"
