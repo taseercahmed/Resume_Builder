@@ -26,6 +26,7 @@ class MainViewModel(app:Application) : AndroidViewModel(app) {
        getUserEducation(app)
        getUser(app)
        getUserHistory(app)
+       getUserSkills(app)
    }
 
     //These is all about heading means personal info

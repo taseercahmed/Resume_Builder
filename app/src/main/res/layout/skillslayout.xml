@@ -14,22 +14,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:padding="5dp"
             android:text="Skills"
             android:textAlignment="textStart"
-            android:textColor="@color/black"
+            android:textColor="@color/teal_200"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/skillText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:hint="Tell here Your Skills"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -37,37 +38,39 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3"></EditText>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/savbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@color/teal_200"
             android:text="Save"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/editText"
-            app:layout_constraintStart_toStartOf="@+id/editText"
-            app:layout_constraintTop_toBottomOf="@+id/editText"></Button>
+            app:layout_constraintEnd_toEndOf="@+id/skillText"
+            app:layout_constraintStart_toStartOf="@+id/skillText"
+            app:layout_constraintTop_toBottomOf="@+id/skillText"></Button>
 
         <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
+            android:visibility="gone"
             android:background="@android:drawable/ic_menu_add"
             app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView3"></Button>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/skillsrecycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toTopOf="@+id/button2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintTop_toBottomOf="@+id/savbutton"></androidx.recyclerview.widget.RecyclerView>
 
         <Button
             android:id="@+id/button2"

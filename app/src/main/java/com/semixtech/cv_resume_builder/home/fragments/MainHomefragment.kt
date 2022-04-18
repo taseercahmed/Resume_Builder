@@ -19,19 +19,22 @@ import com.semixtech.cv_resume_builder.databinding.FragmentMainHomefragmentBindi
 import com.semixtech.cv_resume_builder.db.Entity.UserEducationEntity
 import com.semixtech.cv_resume_builder.db.Entity.UserEntity
 import com.semixtech.cv_resume_builder.db.Entity.UserHistoryEntity
+import com.semixtech.cv_resume_builder.db.Entity.UserSkillsEntity
 
 
 import com.semixtech.cv_resume_builder.kotlinwork.viewmodel.MainViewModel
 import com.semixtech.cv_resume_builder.home.adapter.RecyclerViewAdapter
+import com.semixtech.cv_resume_builder.home.adapter.SkillsAdapter
 import com.semixtech.cv_resume_builder.home.adapter.WorkHistoryAdapter
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), RecyclerViewAdapter.RowClickListener,WorkHistoryAdapter.RowClickListner
+class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), RecyclerViewAdapter.RowClickListener,WorkHistoryAdapter.RowClickListner,SkillsAdapter.RowClickListner
 {
     lateinit var recyclerViewAdapter: RecyclerViewAdapter
     lateinit var recyclerViewAdapter1: WorkHistoryAdapter
+    lateinit var recyclerViewAdapter2: SkillsAdapter
     lateinit var viewModel: MainViewModel
     @SuppressLint("ResourceAsColor")
     override fun OnCreateView(inflater: LayoutInflater?, savedInstanceState: Bundle?) {
@@ -59,6 +62,14 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             adapter = recyclerViewAdapter1
             val divider = DividerItemDecoration(requireContext(), StaggeredGridLayoutManager.VERTICAL)
             addItemDecoration(divider)
+        }
+        dataBinding!!.skillslayout.skillsrecycler!!.apply {
+           layoutManager = LinearLayoutManager(requireContext())
+            recyclerViewAdapter2= SkillsAdapter(this@MainHomefragment)
+            adapter=recyclerViewAdapter2
+//            val divider = DividerItemDecoration(requireContext(), StaggeredGridLayoutManager.VERTICAL)
+//            addItemDecoration(divider)
+
         }
         dataBinding!!.workhistorylayout.StartDateid.setOnClickListener(View.OnClickListener {
             val c= Calendar.getInstance()
@@ -148,29 +159,19 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
 
              }
         })
+        viewModel.getUserSkillsObservers().observe(requireActivity(),
+            Observer {
+                if(it.size>0){
+                    recyclerViewAdapter2.setListData(ArrayList(it))
+                    recyclerViewAdapter2.notifyDataSetChanged()
+               //     var user=it.get(0)
+                //    dataBinding!!.skillslayout.skillText.setText(user.Skills)
+                }
+            })
 
         dataBinding!!.workhistorytab!!.setEnabled(false)
         dataBinding!!.educationtab!!.setEnabled(false)
         dataBinding!!.skillstab!!.setEnabled(false)
-        dataBinding!!.headingtab!!.setOnClickListener(View.OnClickListener {
-            dataBinding!!.headinglayout!!.heading.setVisibility(View.VISIBLE)
-            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
-            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
-            dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
-        })
-
-        dataBinding!!.workhistorytab!!.setOnClickListener(View.OnClickListener {
-            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
-            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.VISIBLE)
-            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
-            dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
-        })
-        dataBinding!!.educationtab!!.setOnClickListener(View.OnClickListener {
-            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
-            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
-            dataBinding!!.educationlayout.education.setVisibility(View.VISIBLE)
-            dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
-        })
 
         dataBinding!!.headinglayout.button1!!.setOnClickListener(View.OnClickListener {
             addData()
@@ -233,6 +234,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
             dataBinding!!.historyrecycler.historyrec.setVisibility(View.GONE)
             dataBinding!!.educationlayout.education.setVisibility(View.VISIBLE)
+            dataBinding!!.skillslayout.skillrec.setVisibility(View.GONE)
 
             dataBinding!!.educationtab!!.setEnabled(false)
             dataBinding!!.educationtab.setTextColor(R.color.black_text_color)
@@ -244,10 +246,43 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             dataBinding!!.workhistorylayout.workhistory.setVisibility(View.VISIBLE)
             dataBinding!!.educationlayout.education.setVisibility(View.GONE)
             dataBinding!!.historyrecycler.historyrec.setVisibility(View.GONE)
-            dataBinding!!.educationtab!!.setEnabled(false)
-
-            dataBinding!!.educationtab.setTextColor(R.color.light_grey)
+//            dataBinding!!.educationtab!!.setEnabled(false)
+//
+//            dataBinding!!.educationtab.setTextColor(R.color.light_grey)
         })
+        dataBinding!!.educationrecycler.nextbutton.setOnClickListener(View.OnClickListener {
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.historyrecycler.historyrec.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
+            dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
+            dataBinding!!.skillslayout.skillrec.setVisibility(View.VISIBLE)
+
+            dataBinding!!.skillstab!!.setEnabled(false)
+            dataBinding!!.skillstab.setTextColor(R.color.black_text_color)
+        })
+        dataBinding!!.educationrecycler.bckbutton.setOnClickListener(View.OnClickListener {
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.historyrecycler.historyrec.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.VISIBLE)
+            dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
+            dataBinding!!.skillslayout.skillrec.setVisibility(View.GONE)
+        })
+      dataBinding!!.skillslayout.savbutton.setOnClickListener(View.OnClickListener {
+          val name  = dataBinding!!.skillslayout.skillText.text.toString()
+
+          if( dataBinding!!.skillslayout.savbutton.text.equals("Save")) {
+              val user = UserSkillsEntity(0, name)
+              viewModel.insertUserSkills(user,requireContext())
+          } else {
+              val user = UserSkillsEntity(dataBinding!!.skillslayout.skillText.getTag(dataBinding!!.skillslayout.skillText.id).toString().toInt(), name)
+              viewModel.UpdateUserSkills(user,requireContext())
+              dataBinding!!.skillslayout.savbutton.setText("Save")
+          }
+          dataBinding!!.skillslayout.skillText.setText("")
+
+      })
     }
     override fun getlayout(): Int {
         return R.layout.fragment_main_homefragment
@@ -361,7 +396,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             if(dataBinding!!.workhistorylayout.historybtn.text.equals("Next"))
             {
                 val user= UserHistoryEntity(0,jobtitle,Employer,City,Country,startdate,enddate,"")
-                viewModel.updateUserHistory(user,requireContext())
+                viewModel.insertUserHistory(user,requireContext())
 
             } else {
                 val user= UserHistoryEntity(  dataBinding!!.workhistorylayout.jobid.getTag(dataBinding!!.workhistorylayout.jobid.id).toString().toInt()
@@ -526,5 +561,15 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
         dataBinding!!.workhistorylayout.jobid.setTag(dataBinding!!.workhistorylayout.jobid.id,user._id)
 
         dataBinding!!.workhistorylayout.historybtn.setText("Update")
+    }
+
+    override fun onDeleteUserClickListner(user: UserSkillsEntity) {
+        viewModel.deleteUserSkills(user,requireContext())
+    }
+
+    override fun onEditClickListner(user: UserSkillsEntity) {
+        dataBinding!!.skillslayout.skillText.setText(user.Skills)
+        dataBinding!!.skillslayout.skillText.setTag(dataBinding!!.skillslayout.skillText.id, user._id)
+        dataBinding!!.skillslayout.savbutton.setText("Update")
     }
 }
