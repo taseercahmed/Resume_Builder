@@ -305,6 +305,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/horizontal"
                 ></include>
 
+            <include
+                android:id="@+id/skillslayout"
+                layout="@layout/skillslayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal"
+                ></include>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

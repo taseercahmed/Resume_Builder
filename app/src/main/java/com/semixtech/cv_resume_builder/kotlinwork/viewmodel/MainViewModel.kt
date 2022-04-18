@@ -8,6 +8,7 @@ import com.semixtech.cv_resume_builder.db.Entity.UserEducationEntity
 import com.semixtech.cv_resume_builder.db.Entity.UserEntity
 import com.semixtech.cv_resume_builder.db.RoomAppDb
 import com.semixtech.cv_resume_builder.db.Entity.UserHistoryEntity
+import com.semixtech.cv_resume_builder.db.Entity.UserSkillsEntity
 
 
 class MainViewModel(app:Application) : AndroidViewModel(app) {
@@ -15,16 +16,19 @@ class MainViewModel(app:Application) : AndroidViewModel(app) {
     lateinit var Users:MutableLiveData<List<UserEntity>>
     lateinit var UsersHistory:MutableLiveData<List<UserHistoryEntity>>
     lateinit var UserEducation:MutableLiveData<List<UserEducationEntity>>
+    lateinit var UserSkills:MutableLiveData<List<UserSkillsEntity>>
 
    init {
        Users= MutableLiveData()
        UsersHistory= MutableLiveData()
        UserEducation= MutableLiveData()
+       UserSkills= MutableLiveData()
        getUserEducation(app)
        getUser(app)
        getUserHistory(app)
    }
 
+    //These is all about heading means personal info
     fun getUsersObservers():MutableLiveData<List<UserEntity>>
     {
         return Users
@@ -54,6 +58,9 @@ class MainViewModel(app:Application) : AndroidViewModel(app) {
         return userDao!!.isRowIsExist(p)
 
     }
+
+
+    //These is all about Work History of User
 
     fun getUserhistoryObservers():MutableLiveData<List<UserHistoryEntity>>
     {
@@ -90,8 +97,7 @@ class MainViewModel(app:Application) : AndroidViewModel(app) {
 
     }
 
-
-
+    //These is all about User Education
     fun getUsereducationObservers():MutableLiveData<List<UserEducationEntity>>
     {
         return UserEducation
@@ -127,4 +133,41 @@ class MainViewModel(app:Application) : AndroidViewModel(app) {
         return usereducationDao!!.isRowIsExist(p)
 
     }
+
+    //Now its time of User Skills
+
+    fun getUserSkillsObservers():MutableLiveData<List<UserSkillsEntity>>
+    {
+        return UserSkills
+    }
+    fun getUserSkills(c:Context)
+    {
+        val userskillsDao = RoomAppDb.getAppDatabase(c)?.UserskillDao()
+        val list=userskillsDao?.getAllskills()
+        UserSkills.postValue(list)
+    }
+    fun insertUserSkills(entity: UserSkillsEntity,c:Context)
+    {
+        val userSkillsDao=RoomAppDb.getAppDatabase(c)?.UserskillDao()
+        userSkillsDao?.insertUser(entity)
+        getUserSkills(c)
+    }
+    fun deleteUserSkills(entity: UserSkillsEntity,c:Context)
+    {
+        val userSkillsDao=RoomAppDb.getAppDatabase(c)?.UserskillDao()
+        userSkillsDao?.deleteUser(entity)
+        getUserSkills(c)
+    }
+    fun UpdateUserSkills(entity: UserSkillsEntity,c:Context)
+    {
+        val userSkillsDao=RoomAppDb.getAppDatabase(c)?.UserskillDao()
+        userSkillsDao?.updateUser(entity)
+        getUserSkills(c)
+    }
+    fun isExistUsrSkills(c: Context, p: Int): Boolean {
+        val userskillsdao=RoomAppDb.getAppDatabase(c)?.UserskillDao()
+        return userskillsdao!!.isRowIsExist(p)
+
+    }
+
 }
