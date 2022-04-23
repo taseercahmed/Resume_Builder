@@ -85,24 +85,38 @@
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edate"
+                app:layout_constraintEnd_toStartOf="@+id/text"
                 app:layout_constraintStart_toStartOf="@+id/cname"
                 app:layout_constraintTop_toBottomOf="@+id/cname"></TextView>
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="to"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/sdate"
+                app:layout_constraintEnd_toStartOf="@+id/edate"
+                app:layout_constraintStart_toEndOf="@+id/sdate"
+                app:layout_constraintTop_toTopOf="@+id/sdate"></TextView>
 
             <TextView
                 android:id="@+id/edate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="32dp"
                 android:text="End Date"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/sdate"
+                app:layout_constraintBottom_toBottomOf="@+id/text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/sdate"
-                app:layout_constraintTop_toTopOf="@+id/sdate"></TextView>
+                app:layout_constraintStart_toEndOf="@+id/text"
+                app:layout_constraintTop_toTopOf="@+id/text"></TextView>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

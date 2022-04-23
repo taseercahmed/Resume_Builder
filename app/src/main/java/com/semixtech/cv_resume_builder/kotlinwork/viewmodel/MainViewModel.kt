@@ -4,11 +4,9 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.semixtech.cv_resume_builder.db.Entity.UserEducationEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserEntity
+import com.semixtech.cv_resume_builder.db.Entity.*
 import com.semixtech.cv_resume_builder.db.RoomAppDb
-import com.semixtech.cv_resume_builder.db.Entity.UserHistoryEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserSkillsEntity
+import java.io.File
 
 
 class MainViewModel(app:Application) : AndroidViewModel(app) {
@@ -17,16 +15,21 @@ class MainViewModel(app:Application) : AndroidViewModel(app) {
     lateinit var UsersHistory:MutableLiveData<List<UserHistoryEntity>>
     lateinit var UserEducation:MutableLiveData<List<UserEducationEntity>>
     lateinit var UserSkills:MutableLiveData<List<UserSkillsEntity>>
+    lateinit var UserSummary:MutableLiveData<List<UserSummaryEntity>>
+    var pdfFile = MutableLiveData<File>()
+    var pdfStatus = MutableLiveData<String>()
 
    init {
        Users= MutableLiveData()
        UsersHistory= MutableLiveData()
        UserEducation= MutableLiveData()
        UserSkills= MutableLiveData()
+       UserSummary= MutableLiveData()
        getUserEducation(app)
        getUser(app)
        getUserHistory(app)
        getUserSkills(app)
+
    }
 
     //These is all about heading means personal info
@@ -171,4 +174,39 @@ class MainViewModel(app:Application) : AndroidViewModel(app) {
 
     }
 
+    //Now its time of User Summary
+
+    fun getUserSummaryObservers():MutableLiveData<List<UserSummaryEntity>>
+    {
+        return UserSummary
+    }
+    fun getUserSummary(c:Context)
+    {
+        val usersummaryDao = RoomAppDb.getAppDatabase(c)?.UsersummaryDao()
+        val list=usersummaryDao?.getAllsummary()
+        UserSummary.postValue(list)
+    }
+    fun insertUserSummary(entity: UserSummaryEntity,c:Context)
+    {
+        val userSummaryDao=RoomAppDb.getAppDatabase(c)?.UsersummaryDao()
+        userSummaryDao?.insertUser(entity)
+       getUserSummary(c)
+    }
+    fun deleteUserSummary(entity: UserSummaryEntity,c:Context)
+    {
+        val userSummaryDao=RoomAppDb.getAppDatabase(c)?.UsersummaryDao()
+        userSummaryDao?.deleteUser(entity)
+        getUserSummary(c)
+    }
+    fun UpdateUserSummary(entity: UserSummaryEntity,c:Context)
+    {
+        val userSummaryDao=RoomAppDb.getAppDatabase(c)?.UsersummaryDao()
+        userSummaryDao?.updateUser(entity)
+        getUserSummary(c)
+    }
+    fun isExistUsrSummary(c: Context, p: Int): Boolean {
+        val usersummaryDao=RoomAppDb.getAppDatabase(c)?.UsersummaryDao()
+        return usersummaryDao!!.isRowIsExist(p)
+
+    }
 }

@@ -1,33 +1,29 @@
 package com.semixtech.cv_resume_builder.home.fragments
 
+
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-
 import com.semixtech.cv_resume_builder.R
 import com.semixtech.cv_resume_builder.base.BaseFramnet
 import com.semixtech.cv_resume_builder.databinding.FragmentMainHomefragmentBinding
-import com.semixtech.cv_resume_builder.db.Entity.UserEducationEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserHistoryEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserSkillsEntity
-
-
-import com.semixtech.cv_resume_builder.kotlinwork.viewmodel.MainViewModel
+import com.semixtech.cv_resume_builder.db.Entity.*
+import com.semixtech.cv_resume_builder.helper.TemplateDefaultModel
+import com.semixtech.cv_resume_builder.home.activities.HomeActivity
 import com.semixtech.cv_resume_builder.home.adapter.RecyclerViewAdapter
 import com.semixtech.cv_resume_builder.home.adapter.SkillsAdapter
 import com.semixtech.cv_resume_builder.home.adapter.WorkHistoryAdapter
+import com.semixtech.cv_resume_builder.kotlinwork.viewmodel.MainViewModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), RecyclerViewAdapter.RowClickListener,WorkHistoryAdapter.RowClickListner,SkillsAdapter.RowClickListner
@@ -36,12 +32,17 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
     lateinit var recyclerViewAdapter1: WorkHistoryAdapter
     lateinit var recyclerViewAdapter2: SkillsAdapter
     lateinit var viewModel: MainViewModel
+    lateinit var homeActivity:HomeActivity
     @SuppressLint("ResourceAsColor")
+
     override fun OnCreateView(inflater: LayoutInflater?, savedInstanceState: Bundle?) {
 
 
     }
-
+    fun datacommunication() {
+        homeActivity = activity as HomeActivity
+        homeActivity!!.invoiceCommunicationEditScreen()
+    }
 
     @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,12 +75,13 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
         dataBinding!!.workhistorylayout.StartDateid.setOnClickListener(View.OnClickListener {
             val c= Calendar.getInstance()
             val year=c.get(Calendar.YEAR)
-            val month=c.get(Calendar.MONTH)
+            var month1=c.get(Calendar.MONTH)
             val day=c.get(Calendar.DAY_OF_MONTH)
-            val Startd=DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                dataBinding!!.workhistorylayout.StartDateid!!.setText(""+dayOfMonth+"-"+month+"-"+year)
+            val Startd=DatePickerDialog(requireContext(),DatePickerDialog.OnDateSetListener { view, year, month1, dayOfMonth ->
+                var month1=month1+1
+                dataBinding!!.workhistorylayout.StartDateid!!.setText(""+dayOfMonth+"-"+month1+"-"+year)
 
-            },year,month,day)
+            },year,month1 ,day)
             Startd.show()
         })
         dataBinding!!.workhistorylayout.EndDateid.setOnClickListener(View.OnClickListener {
@@ -88,6 +90,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             val month=c.get(Calendar.MONTH)
             val day=c.get(Calendar.DAY_OF_MONTH)
             val Startd=DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                var month=month+1
                 dataBinding!!.workhistorylayout.EndDateid!!.setText(""+dayOfMonth+"-"+month+"-"+year)
 
             },year,month,day)
@@ -100,7 +103,8 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
                  val month=c.get(Calendar.MONTH)
                  val day=c.get(Calendar.DAY_OF_MONTH)
            val Startd=DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-           dataBinding!!.educationlayout.GraduationStartDate!!.setText(""+dayOfMonth+"-"+month+"-"+year)
+               var month=month+1
+               dataBinding!!.educationlayout.GraduationStartDate!!.setText(""+dayOfMonth+"-"+month+"-"+year)
 
            },year,month,day)
                  Startd.show()
@@ -112,6 +116,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             val month=c.get(Calendar.MONTH)
             val day=c.get(Calendar.DAY_OF_MONTH)
             val Startd=DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                var month=month+1
                 dataBinding!!.educationlayout.GraduationEndDate!!.setText(""+dayOfMonth+"-"+month+"-"+year)
 
             },year,month,day)
@@ -130,9 +135,21 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
 
              }
         })
+        viewModel.getUserSummaryObservers().observe(requireActivity(),
+            {
+                if (it.size>0)
+                {
+                    var user=it.get(0)
+                    dataBinding!!.summarylayout.editTextsummary.setText(user.Summary)
+
+                }
+
+
+        })
 
         viewModel.getUsersObservers().observe(requireActivity(),{
-            if(it.size>0){
+            if(it.size>0)
+            {
                 var user=it.get(0)
                 dataBinding!!.headinglayout.firstname.setText(user.firstname)
                 dataBinding!!.headinglayout.name2.setText(user.secondname)
@@ -141,6 +158,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
                 dataBinding!!.headinglayout.country1.setText(user.country)
                 dataBinding!!.headinglayout.phone1.setText(user._phone)
                 dataBinding!!.headinglayout.emailid.setText(user.email)
+
             }
         })
         viewModel.getUserhistoryObservers().observe(requireActivity(),
@@ -283,6 +301,51 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
           dataBinding!!.skillslayout.skillText.setText("")
 
       })
+        dataBinding!!.skillslayout.skillNext.setOnClickListener(View.OnClickListener {
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.historyrecycler.historyrec.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
+            dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
+            dataBinding!!.skillslayout.skillrec.setVisibility(View.GONE)
+            dataBinding!!.summarylayout.summaryrec.setVisibility(View.VISIBLE)
+        })
+        dataBinding!!.skillslayout.skillBack.setOnClickListener(View.OnClickListener {
+            dataBinding!!.headinglayout!!.heading.setVisibility(View.GONE)
+            dataBinding!!.workhistorylayout.workhistory.setVisibility(View.GONE)
+            dataBinding!!.historyrecycler.historyrec.setVisibility(View.GONE)
+            dataBinding!!.educationlayout.education.setVisibility(View.GONE)
+            dataBinding!!.educationrecycler.educationrec.setVisibility(View.GONE)
+            dataBinding!!.skillslayout.skillrec.setVisibility(View.VISIBLE)
+            dataBinding!!.summarylayout.summaryrec.setVisibility(View.GONE)
+        })
+        dataBinding!!.summarylayout.summarysaved.setOnClickListener(View.OnClickListener {
+            val summary=dataBinding!!.summarylayout.editTextsummary.text.toString()
+            val user =UserSummaryEntity(0,summary)
+            viewModel.insertUserSummary(user,requireContext())
+        })
+        dataBinding!!.summarylayout.boldbutton.setOnClickListener(View.OnClickListener {
+            val summary1=dataBinding!!.summarylayout.editTextsummary.setTypeface(Typeface.DEFAULT_BOLD)
+//            val user=UserSummaryEntity(0,summary1.toString())
+//            viewModel.UpdateUserSummary(user,requireContext())
+
+
+        })
+        dataBinding!!.summarylayout.button4.setOnClickListener(View.OnClickListener {
+            val typeface = Typeface.createFromAsset(requireActivity().assets, "font/poppins_lightitalic.ttf")
+            val summary1=dataBinding!!.summarylayout.editTextsummary.setTypeface(typeface)
+//            val user=UserSummaryEntity(0,summary1.toString())
+//            viewModel.UpdateUserSummary(user,requireContext())
+
+
+        })
+        dataBinding!!.summarylayout.buttonn.setOnClickListener(View.OnClickListener {
+            val summary1=dataBinding!!.summarylayout.editTextsummary.setTypeface(Typeface.DEFAULT)
+//            val user=UserSummaryEntity(0,summary1.toString())
+//            viewModel.UpdateUserSummary(user,requireContext())
+
+
+        })
     }
     override fun getlayout(): Int {
         return R.layout.fragment_main_homefragment

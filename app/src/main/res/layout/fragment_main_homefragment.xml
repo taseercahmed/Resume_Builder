@@ -77,7 +77,7 @@
                     android:gravity="center"
                     android:text="1"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/dark_grey"
                      android:textSize="10sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/headingtab"
@@ -308,6 +308,17 @@
             <include
                 android:id="@+id/skillslayout"
                 layout="@layout/skillslayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal"
+                ></include>
+            <include
+                android:id="@+id/summarylayout"
+                layout="@layout/summarylayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:visibility="gone"

@@ -6,22 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.semixtech.cv_resume_builder.db.Dao.UserDao
-import com.semixtech.cv_resume_builder.db.Dao.UserHistoryDao
-import com.semixtech.cv_resume_builder.db.Dao.UsereducationDao
-import com.semixtech.cv_resume_builder.db.Dao.UserskillDao
-import com.semixtech.cv_resume_builder.db.Entity.UserEducationEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserHistoryEntity
-import com.semixtech.cv_resume_builder.db.Entity.UserSkillsEntity
+import com.semixtech.cv_resume_builder.db.Dao.*
+import com.semixtech.cv_resume_builder.db.Entity.*
 
 
-@Database(entities = [UserEntity::class,UserHistoryEntity::class,UserEducationEntity::class,UserSkillsEntity::class], version = 5, exportSchema = false)
+@Database(entities = [UserEntity::class,UserHistoryEntity::class,UserEducationEntity::class,UserSkillsEntity::class,UserSummaryEntity::class], version = 52, exportSchema = false)
 abstract class RoomAppDb:RoomDatabase() {
     abstract fun UserDao(): UserDao?
     abstract fun UserHistoryDao(): UserHistoryDao?
     abstract fun UsereducationDao():UsereducationDao
     abstract fun UserskillDao():UserskillDao
+    abstract fun UsersummaryDao():UsersummaryDao
     companion object
     {
         private var INSTANCE: RoomAppDb? = null
