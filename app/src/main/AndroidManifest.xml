@@ -3,6 +3,8 @@
     package="com.semixtech.cv_resume_builder">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".base.MyApplication"
@@ -12,13 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Resume_Builder">
-        <activity
-            android:name=".checkdata.db1.MainActivity2"
-            android:exported="false">
-
-
-
-        </activity>
         <activity
             android:name=".home.activities.HomeActivity"
             android:exported="true">

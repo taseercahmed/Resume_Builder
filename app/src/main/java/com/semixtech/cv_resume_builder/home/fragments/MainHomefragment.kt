@@ -35,8 +35,8 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
     lateinit var homeActivity:HomeActivity
     @SuppressLint("ResourceAsColor")
 
-    override fun OnCreateView(inflater: LayoutInflater?, savedInstanceState: Bundle?) {
-
+    override fun OnCreateView(inflater: LayoutInflater?, savedInstanceState: Bundle?)
+    {
 
     }
     fun datacommunication() {
@@ -323,6 +323,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             val summary=dataBinding!!.summarylayout.editTextsummary.text.toString()
             val user =UserSummaryEntity(0,summary)
             viewModel.insertUserSummary(user,requireContext())
+            datacommunication()
         })
         dataBinding!!.summarylayout.boldbutton.setOnClickListener(View.OnClickListener {
             val summary1=dataBinding!!.summarylayout.editTextsummary.setTypeface(Typeface.DEFAULT_BOLD)
@@ -404,6 +405,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             dataBinding!!.educationlayout.education.setVisibility(View.GONE)
             dataBinding!!.workhistorytab!!.setEnabled(true)
             dataBinding!!.workhistorytab.setTextColor(R.color.black_text_color)
+
         }else{
             val user= UserEntity(phone1,firstname,secondname,profession1,city,country,postalcode,email)
             viewModel.insertUserInfo(user,requireContext())
@@ -412,6 +414,7 @@ class MainHomefragment : BaseFramnet<FragmentMainHomefragmentBinding>(), Recycle
             dataBinding!!.educationlayout.education.setVisibility(View.GONE)
             dataBinding!!.workhistorytab!!.setEnabled(true)
             dataBinding!!.workhistorytab.setTextColor(R.color.black_text_color)
+
         }
 
 

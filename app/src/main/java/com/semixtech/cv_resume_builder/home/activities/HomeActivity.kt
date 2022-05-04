@@ -1,35 +1,42 @@
 package com.semixtech.cv_resume_builder.home.activities
 
+import android.Manifest
+import android.content.Intent
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.CompositeMultiplePermissionsListener
+import com.karumi.dexter.listener.multi.DialogOnAnyDeniedMultiplePermissionsListener
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.semixtech.cv_resume_builder.R
 import com.semixtech.cv_resume_builder.base.BaseActivity
 import com.semixtech.cv_resume_builder.databinding.ActivityHomeBinding
 import com.semixtech.cv_resume_builder.db.Entity.*
-import com.semixtech.cv_resume_builder.helper.ClickHandler
-import com.semixtech.cv_resume_builder.helper.PdfConverter
-import com.semixtech.cv_resume_builder.helper.SectionsPagerAdapter
-import com.semixtech.cv_resume_builder.helper.TemplateDefaultModel
+import com.semixtech.cv_resume_builder.helper.*
 import com.semixtech.cv_resume_builder.home.fragments.MainHomefragment
 import com.semixtech.cv_resume_builder.home.fragments.PreviewFragment
 import com.semixtech.cv_resume_builder.home.fragments.SavedFragment
 import com.semixtech.cv_resume_builder.home.templates.Template1
 import com.semixtech.cv_resume_builder.kotlinwork.viewmodel.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -55,7 +62,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     private fun getPreview() {
         if (viewModel.pdfFile.value != null) {
             if (viewModel.pdfFile.value!!.exists()) {
-                viewModel.pdfFile.value!!.delete()
+                Log.i("TAG", "getPreview: ${viewModel.pdfFile.value!!.absolutePath}")
+              //  viewModel.pdfFile.value!!.delete()
             }
         }
         if (this@HomeActivity::htmlFile.isInitialized) {
@@ -63,32 +71,34 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
                 htmlFile.delete()
             }
         }
-        var user:UserEntity?=null
-       if(viewModel.Users.value!!.size>0){
+        var user:UserEntity=UserEntity("","","","","","","","")
+       if(viewModel.Users.value!=null && viewModel.Users.value!!.size>0){
            user=viewModel.Users.value!!.get(0)
        }
-        var edu:UserEducationEntity?=null
-        if(viewModel.Users.value!!.size>0){
+        var edu:UserEducationEntity= UserEducationEntity(0,"","","","","")
+        if(viewModel.Users.value!=null && viewModel.Users.value!!.size>0){
             edu=viewModel.UserEducation.value!!.get(0)
         }
-        var history:UserHistoryEntity?=null
-        if(viewModel.UsersHistory.value!!.size>0){
+        var history:UserHistoryEntity= UserHistoryEntity(0,"","","","","","","")
+        if(viewModel.UsersHistory.value!=null && viewModel.UsersHistory.value!!.size>0){
             history=viewModel.UsersHistory.value!!.get(0)
         }
-        var skill:UserSkillsEntity?=null
-        if(viewModel.UserSkills.value!!.size>0){
+        var skill:UserSkillsEntity= UserSkillsEntity(0,"")
+        if(viewModel.UserSkills.value!=null && viewModel.UserSkills.value!!.size>0){
             skill=viewModel.UserSkills.value!!.get(0)
         }
-        var summary:UserSummaryEntity?=null
-        if(viewModel.UserSummary.value!!.size>0){
+        var summary:UserSummaryEntity= UserSummaryEntity(0,"")
+        if(  viewModel.UserSummary.value!=null && viewModel.UserSummary.value!!.size>0){
             summary=viewModel.UserSummary.value!!.get(0)
         }
 
-        templateDefaultModel= TemplateDefaultModel(user = user!!,workhistory = history!!,userEducationEntity = edu!!,userSkillsEntity = skill!!,userSummaryEntity = summary!!)
+
+        templateDefaultModel= TemplateDefaultModel(user = user!!,workhistory = history!!, userEducationEntity = edu!!,userSkillsEntity = skill!!, userSummaryEntity = summary!!)
         val htmlText: String = fragmentPreviewInvoiceForInvoice()
 
-        Log.e("Invoice Converted", "hi-->$htmlText")
+        Log.i("Invoice Converted", "hi-->$htmlText")
         val htmlFilePath = saveHtmlTextToFile(htmlText)
+
        GlobalScope.launch(Dispatchers.Main) {
 //                Toast.makeText(context!!, "HTML Created", Toast.LENGTH_SHORT).show()
             createPdfFromHtml(htmlFilePath)
@@ -99,25 +109,47 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
 
     @Suppress("DEPRECATION")
     fun createPdfFromHtml(htmlFile: File) {
-        Log.e("TAG", "createPdfFromHtml:Started...")
+        Log.i("TAG", "createPdfFromHtml:Started...")
 
-        pdfFileGenerationJob = GlobalScope.launch(Dispatchers.Main) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                viewModel.pdfFile.value = File(context!!.filesDir.toString() + "/", "ResumeActual.pdf")
-            } else {
-                viewModel.pdfFile.value = File(Environment.getExternalStorageDirectory().path.toString() + "/", "ResumeActual.pdf")
-            }
-        }
+      lifecycleScope.launch(Dispatchers.Main) {
+          GlobalScope.async(Dispatchers.Main) {
+              pdfFileGenerationJob = GlobalScope.launch(Dispatchers.Main) {
+                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+                      viewModel.pdfFile.value = File(filesDir.toString() + "/", "ResumeActual.pdf")
+                      Log.i("Tag", "createPdfFromHtml: ${viewModel.pdfFile.value!!.absolutePath}")
+                  } else {
+                      Log.i("Tag", "createPdfFromHtml:2223333")
+
+                      viewModel.pdfFile.value = File(Environment.getExternalStorageDirectory().path.toString() + "/", "ResumeActual.pdf")
+                      Log.i("Tag", "createPdfFromHtml:2223 ${viewModel.pdfFile.value!!.absolutePath}")
+
+                  }
+
+              }
+          }.await()
+      }
+      //  Log.i("TAG", "createPdfFromHtml:124646 ${viewModel.pdfFile.value!!.absolutePath} ")
         backgroundTaskList[3] = pdfFileGenerationJob
         previousJobAnalyser = GlobalScope.launch(Dispatchers.IO) {
-            pdfFileGenerationJob!!.join()
-//            Toast.makeText(context!!, "Cancling previous one", Toast.LENGTH_SHORT).show()
+//            pdfFileGenerationJob!!.join()
+////            Toast.makeText(context!!, "Cancling previous one", Toast.LENGTH_SHORT).show()
             if (pdfGenerationJobFromWebView != null) {
                 pdfGenerationJobFromWebView!!.cancel()
             }
             pdfGenerationJobFromWebView = GlobalScope.launch(Dispatchers.Unconfined) {
                 suspend {
-                    converter!!.convert(htmlFile, viewModel.pdfFile.value!!)
+                    if(htmlFile!=null){
+                       if(viewModel.pdfFile.value!=null){
+                           converter!!.convert(htmlFile, viewModel.pdfFile.value!!)
+                       }
+                       else{
+                           Log.i("TAG", "createPdfFromHtml:3 ")
+                       }
+                    }else{
+                        Log.i("TAG", "createPdfFromHtml:2 ")
+                    }
+
                 }.invoke()
             }
 
@@ -133,7 +165,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
                 pdfGenerationJobFromWebView!!.join()
                 val fragment = PreviewFragment()
                // fragment.getTemplatePreview(viewModel.pdfFile.value!!)
-                Log.e("TAG", "createPdfFromHtml: PDF generation completed...")
+                Log.i("TAG", "createPdfFromHtml: PDF generation completed..."+fragment)
 
             } else {
                 createPdfFromHtml(htmlFile)
@@ -144,13 +176,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     @Suppress("DEPRECATION")
     private fun saveHtmlTextToFile(htmlText: String): File {
 
-        htmlFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        htmlFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             File(
                 context!!.filesDir.toString() + "/", "ResumeActual.html"
             )
         } else {
             File(
-                Environment.getExternalStorageDirectory().path.toString() + "/",
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path.toString() + "/",
                 "ResumeActual.html"
             )
         }
@@ -169,8 +201,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     }
 
     private fun fragmentPreviewInvoiceForInvoice(): String {
-
-        return generateTemplate("1")
+      var s=generateTemplate("1")
+        Log.i("TAG", "Gnerate tamplate : " + s)
+        return s
     }
 
     private fun generateTemplate(templateId: String): String {
@@ -202,7 +235,76 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
         adapter = SectionsPagerAdapter(supportFragmentManager)
         setupViewPager(dataBinding!!.viewPager)
         initSetting()
+
         viewModel = ViewModelProviders.of(this!!)[MainViewModel::class.java]
+        converter=PdfConverter.from(this){ error -> errorCommunication(error)}
+        invoiceCommunicationEditScreen()
+
+        //RunTime Permission
+        //RunTime Permission
+        val dialogMultiplePermissionsListener: MultiplePermissionsListener =
+            DialogOnAnyDeniedMultiplePermissionsListener.Builder
+                .withContext(this)
+                .withTitle(R.string.media_access_title)
+                .withMessage(R.string.permission_description)
+                .withButtonText(android.R.string.ok)
+                .withIcon(R.drawable.ic_launcher_background)
+                .build()
+
+        val permissionsListener: MultiplePermissionsListener =
+            object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                    // check if all permissions are granted
+                    if (report.areAllPermissionsGranted()) {
+                        // do you work now
+                        Log.d("TAG", "OK")
+                    }
+
+                    // check for permanent denial of any permission
+                    if (report.isAnyPermissionPermanentlyDenied()) {
+                        // permission is denied permenantly, navigate user to app settings
+                        gotoSettingsScreen()
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: List<PermissionRequest?>?,
+                    token: PermissionToken
+                ) {
+                    token.continuePermissionRequest()
+                }
+            }
+
+        val compositePermissionsListener: MultiplePermissionsListener =
+            CompositeMultiplePermissionsListener(
+                permissionsListener,
+                dialogMultiplePermissionsListener
+            )
+
+        Dexter.withContext(this)
+            .withPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
+            .withListener(compositePermissionsListener)
+            .onSameThread()
+            .check()
+    }
+
+    private fun gotoSettingsScreen() {
+            val intent = Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", packageName, null)
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+
+    }
+
+    private fun errorCommunication(error:String)
+    {
+        Log.i("TAG", "errorCommunication:${error} ")
+        getPreview()
     }
 
     private fun initSetting() {
@@ -267,7 +369,23 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 
-    override fun onPageSelected(position: Int) {
+    override fun onPageSelected(position: Int)
+    {
+//        ViewAnimation.initShowOut(dataBinding!!.)
+//        ViewAnimation.initShowOut(dataBinding!!.lytCall)
+
+
+        val fragment = adapter!!.getItem(position) as Fragment
+
+        if (fragment is PreviewFragment) {
+
+            if (fragment.view != null && !fragment.requireActivity().isFinishing) {
+//                fragment?.invoice_id=fragmentPreviewInvoiceForInvoice()?.toString()
+//                fragment?.invoice_id = invoice?.invoice_id.toString()
+                fragment.GetPdf()
+            }
+
+        }
     }
 
     override fun onPageScrollStateChanged(state: Int) {

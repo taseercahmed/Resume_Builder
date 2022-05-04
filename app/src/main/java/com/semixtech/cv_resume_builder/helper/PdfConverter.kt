@@ -18,18 +18,19 @@ import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import android.print.PrintDocumentAdapter.WriteResultCallback as WriteResultCallback1
+import android.print.PrintDocumentAdapter.WriteResultCallback
 
 @TargetApi(19)
 class PdfConverter @Inject constructor(
-    private val context: Context,
-    private val errorCommunication: (String) -> Unit
+    public val context: Context,
+    public val errorCommunication: (String) -> Unit
 ) {
 
     private val defaultPrintAttributes: PrintAttributes by lazy {
         PrintAttributes.Builder()
             .setMediaSize(PrintAttributes.MediaSize.NA_GOVT_LETTER)
-            .setResolution(PrintAttributes.Resolution("RESOLUTION_ID", "RESOLUTION_ID", 1600, 1600))
+            .setResolution(PrintAttributes.Resolution("RESOLUTION_ID", "RESOLUTION_ID",
+                1600, 1600))
             .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
             .build()
     }
@@ -122,43 +123,43 @@ class PdfConverter @Inject constructor(
 
         override fun onPageFinished(webview: WebView, url: String) {
 
-//            CookieManager.getInstance().setAcceptThirdPartyCookies(webview, true);
-//            webview.createPrintDocumentAdapter()?.run {
-//                onLayout(
-//                    null,
-//                    printAttributes ?: defaultPrintAttributes,
-//                    null,
-//                    object : LayoutResultCallback() {},
-//                    null
-//                )
-//                onWrite(
-//                    arrayOf(PageRange.ALL_PAGES),
-//                    file.outputFileDescriptor(),
-//                    null,
-//                    object : WriteResultCallback1() {
-//                        override fun onWriteCancelled() {
-//                            super.onWriteCancelled()
-//                            Log.e("PDF Converter", "onWriteCancelled")
-//                            errorCommunication("Yes")
-//                            continuation.resume(Unit)
-//                        }
-//
-//                        override fun onWriteFailed(error: CharSequence?) {
-//                            super.onWriteFailed(error)
-//                            Log.e("PDF Converter", "onWriteFailed")
-//
-////                            continuation.resumeWithException(Exception(error.toString()))
-//                            errorCommunication("Yes")
-//                        }
-//
-//                        override fun onWriteFinished(pages: Array<out PageRange>?) {
-//                            super.onWriteFinished(pages)
-//                            Log.e("PDF Converter", "onWriteFinished")
-//                            continuation.resume(Unit)
-//                        }
-//                    }
-//                )
-//            }
+            CookieManager.getInstance().setAcceptThirdPartyCookies(webview, true);
+            webview.createPrintDocumentAdapter()?.run {
+                onLayout(
+                    null,
+                    printAttributes ?: defaultPrintAttributes,
+                    null,
+                    object : LayoutResultCallback() {},
+                    null
+                )
+                onWrite(
+                    arrayOf(PageRange.ALL_PAGES),
+                    file.outputFileDescriptor(),
+                    null,
+                    object : WriteResultCallback() {
+                        override fun onWriteCancelled() {
+                            super.onWriteCancelled()
+                            Log.e("PDF Converter", "onWriteCancelled")
+                            errorCommunication("Yes")
+                            continuation.resume(Unit)
+                        }
+
+                        override fun onWriteFailed(error: CharSequence?) {
+                            super.onWriteFailed(error)
+                            Log.e("PDF Converter", "onWriteFailed")
+
+//                            continuation.resumeWithException(Exception(error.toString()))
+                            errorCommunication("Yes")
+                        }
+
+                        override fun onWriteFinished(pages: Array<out PageRange>?) {
+                            super.onWriteFinished(pages)
+                            Log.e("PDF Converter", "onWriteFinished")
+                            continuation.resume(Unit)
+                        }
+                    }
+                )
+            }
         }
     }
 }

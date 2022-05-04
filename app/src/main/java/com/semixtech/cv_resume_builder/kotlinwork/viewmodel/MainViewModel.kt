@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.semixtech.cv_resume_builder.db.Entity.*
 import com.semixtech.cv_resume_builder.db.RoomAppDb
+
 import java.io.File
 
 

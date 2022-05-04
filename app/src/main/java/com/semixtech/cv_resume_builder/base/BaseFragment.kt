@@ -157,4 +157,4 @@ abstract class BaseFramnet<DB : ViewDataBinding?> : Fragment(),
             .isConnected
     }
 
-   }
+}
