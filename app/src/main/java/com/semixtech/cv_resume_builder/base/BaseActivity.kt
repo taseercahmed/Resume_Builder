@@ -54,7 +54,7 @@ abstract class BaseActivity <DB : ViewDataBinding> : AppCompatActivity() {
     var dataBinding: DB? = null
     protected var customDialog: CustomDialog? = null
     val SIGNATURE_STORAGE_PERMISSION = 144
-    var context: Context? = null
+    var context: Context = this
     var MY_REQUEST_CODE_READ_CONTACTS = 15
     var MY_REQUEST_CODE = 12
     var MY_REQUEST_CODE_STORAGE = 13
@@ -84,7 +84,6 @@ abstract class BaseActivity <DB : ViewDataBinding> : AppCompatActivity() {
         }
 
         dataBinding = DataBindingUtil.setContentView(this, getResLayout())
-        context = this
         customDialog = CustomDialog(this)
         customDialog!!.setCancelable(false)
 

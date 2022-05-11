@@ -29,9 +29,7 @@ import com.semixtech.cv_resume_builder.helper.Status
 
 import com.semixtech.cv_resume_builder.home.activities.HomeActivity
 import com.semixtech.cv_resume_builder.kotlinwork.viewmodel.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.w3c.dom.Document
 import java.io.*
 import java.util.*
@@ -40,143 +38,67 @@ import javax.security.auth.callback.Callback
 
 
 class PreviewFragment : BaseFramnet<FragmentPreviewBinding>() {
-    lateinit var viewModel: MainViewModel
-
-    var invoice_id: String? = ""
-
-    companion object {
-        fun newInstance(invoice_id: String): PreviewFragment {
-            val args = Bundle()
-            args.putString("invoice_id", invoice_id)
-            val fragment = PreviewFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun OnCreateView(inflater: LayoutInflater?, savedInstanceState: Bundle?) {
-//        viewModel = ViewModelProviders.of(this!!)[MainViewModel::class.java]
-//        dataBinding!!.pdfView.fromFile(viewModel.pdfFile.value).load()
-
-
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-//        if (requireArguments().containsKey("invoice_id"))
-//        {
-//            invoice_id  = requireArguments().getString("invoice_id")
-//            //  GetPdf()
-//        }
-
     }
 
     override fun getlayout(): Int {
         return R.layout.fragment_preview
     }
-    fun GetPdf()
-    {
-        if((activity as HomeActivity).isConnectedToInternet()) {
-            //   customProgressDialog!!.show()
-           // showCustomDialogueNewDesign("Please Wait...")
-            Log.i("Tag", "GetPdf: ${viewModel!!.pdfFile.value?.absolutePath}")
-            viewModel!!.pdfFile.observe(viewLifecycleOwner, {
-                hideCustomDialogueNewDesign()
-                dataBinding!!.pdfView.visibility = View.VISIBLE
-                dataBinding!!.htmlWebView.visibility = View.GONE
 
-                Log.e("PreviewEstimateFragment", "Showing PDF:" + it.path)
-            })
-        }
+    fun getTemplatePreview(pdfFile: File?) {
+        pdfFile?.let { pdf ->
+            val fileSize: Double = java.lang.String.valueOf(pdf.length() / 1024).toDouble()
+            Log.e("TAG", "getTemplatePreview: size = $fileSize")
 
 
-
-    }
-
-//    fun GetPdf()
-//    {
-//        if((activity as HomeActivity).isConnectedToInternet()) {
-//            //   customProgressDialog!!.show()
-//            showCustomDialogueNewDesign("Please Wait...")
-//            invoiceViewmodel!!.pdfFile.observe(viewLifecycleOwner, {
-//                if (null != it && (it!!.status == Status.ERROR || it!!.status == Status.SUCCESS)) {
-//                    //       customProgressDialog!!.dismiss()
-//                    hideCustomDialogueNewDesign()
-//                }
-//
-//                if (it!!.status == Status.ERROR) {
-//                    showErrorSnakbar(it!!.message!!)
-//                }
-//
-//                if (it!!.status == Status.SUCCESS && it!!.data != null && it!!.message == null) {
-//
-//                    if (it.data!!.showPDF) {
-//                        dataBinding!!.pdfView.visibility = View.VISIBLE
-//                        dataBinding!!.htmlWebView.visibility = View.GONE
-////                        val client = OkHttpClient()
-////                        val request =
-////                           Builder.url(BuildConfig.BASE_URL + it.data!!.pdf_url).build()
-//                        Log.e("PreviewEstimateFragment", "Showing PDF:" + it.data!!.pdf_url)
-//
-////                        client.newCall(request).enqueue(object : Callback {
-////                            @Throws(IOException::class)
-////                            fun onResponse(call: Call, response: Response) {
-////                                if (!response.isSuccessful) {
-////                                    throw IOException("Failed to download file: $response")
-////                                }
-////                                var job = runBlocking(Dispatchers.Main) {
-////                                    launch(Dispatchers.Main) {
-////                                        val stream = ByteArrayInputStream(response.body?.bytes())
-//////                                    var pdf_file = copyStreamToFile(stream)
-////                                        dataBinding!!.pdfView.fromStream(stream)
-////                                            .spacing(0)
-////                                            .load()
-////                                    }
-////                                }
-////                            }
-////
-////                            fun onFailure(call: Call, e: IOException) {
-////                                e.printStackTrace()
-////                                Log.e("TAG", "Failed to load PDF")
-////
-////                            }
-////                        })
-//                    } else {
-//                        dataBinding!!.pdfView.visibility = View.GONE
-//                        dataBinding!!.htmlWebView.visibility = View.VISIBLE
-//                        dataBinding!!.htmlWebView.settings.builtInZoomControls = true
-//                        dataBinding!!.htmlWebView.settings.displayZoomControls = false
-//                        dataBinding!!.htmlWebView.getSettings().setLoadWithOverviewMode(true);
-//                        dataBinding!!.htmlWebView.getSettings().setUseWideViewPort(true)
-//                        dataBinding!!.htmlWebView.setInitialScale(30)
-//                        dataBinding!!.htmlWebView.loadUrl(BuildConfig.BASE_URL + it.data!!.html)
-//                        Log.e("PreviewEstimateFragment", "Showing HTML:" + it.data!!.html)
-//
-//                    }
-//
-//
-//
-//
-//
-//
-//                }
-//            })
-//        }
-//    }
-
-    fun copyStreamToFile(inputStream: InputStream): File {
-            var outPutDir: File = requireContext().getFilesDir()
-            val outputFile = File.createTempFile("temppdf", ".pdf", outPutDir)
-            inputStream.use { input ->
-                val outputStream = FileOutputStream(outputFile)
-                outputStream.use { output ->
-                    val buffer = ByteArray(4 * 1024) // buffer size
-                    while (true) {
-                        val byteCount = input.read(buffer)
-                        if (byteCount < 0) break
-                        output.write(buffer, 0, byteCount)
+            if (activity != null) {
+                if (!requireActivity().isFinishing && fileSize > 0) {
+                    Log.e("getTemplatePreview::", "Called for preview")
+                    GlobalScope.launch(Dispatchers.IO) {
+                        withContext(Dispatchers.Main) {
+                            dataBinding!!.pdfView.visibility = View.INVISIBLE
+                        }
                     }
-                    output.flush()
+                    GlobalScope.launch(Dispatchers.IO) {
+                        launch(Dispatchers.IO) {
+                            withTimeout(60000L) {
+                                try {
+                                    Log.e(
+                                        "Loading Status",
+                                        "loading ------------> Going to load"
+                                    )
+
+                                    withContext(Dispatchers.Main) {
+                                        if (!requireActivity().isFinishing) {
+                                            dataBinding!!.pdfView.fromFile(pdf)
+                                                .onError {
+                                                    Log.e(
+                                                        "Preview Status",
+                                                        "Error ------------> Error while previewing PDF"
+                                                    )
+                                                }.onLoad {
+
+                                                    dataBinding!!.pdfView.visibility = View.VISIBLE
+//
+//                                    Toast.makeText(requireContext(), "Loaded", Toast.LENGTH_SHORT)
+//                                        .show()
+                                                }.load()
+                                        }
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e(
+                                        " withTimeout exception ",
+                                        "hi ----> " + e.localizedMessage
+                                    )
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Log.e("TAG", "getTemplatePreview: Invalid PDF File")
                 }
             }
-            return outputFile
         }
-
     }
+
+}

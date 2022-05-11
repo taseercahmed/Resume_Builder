@@ -43,7 +43,8 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
-class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.OnPageChangeListener {
+class HomeActivity : BaseActivity<ActivityHomeBinding>(), ClickHandler,
+    ViewPager.OnPageChangeListener {
 
     lateinit var adapter: SectionsPagerAdapter
     var tabglobal: TabLayout.Tab? = null
@@ -51,7 +52,21 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     private lateinit var htmlFile: File
     var converter: PdfConverter? = null
     var pdfFileGenerationJob: Job? = null
-    private var backgroundTaskList: MutableList<Job?> = arrayListOf<Job?>(null,null,null,null,null,null,null,null,null,null,null,null,null)
+    private var backgroundTaskList: MutableList<Job?> = arrayListOf<Job?>(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
     var previousJobAnalyser: Job? = null
     var pdfGenerationJobFromWebView: Job? = null
     private var templateDefaultModel: TemplateDefaultModel = TemplateDefaultModel()
@@ -63,8 +78,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     private fun getPreview() {
         if (viewModel.pdfFile.value != null) {
             if (viewModel.pdfFile.value!!.exists()) {
-                Log.i("TAG", "getPreview: ${viewModel.pdfFile.value!!.absolutePath}")
-              //  viewModel.pdfFile.value!!.delete()
+                Log.e("TAG", "getPreview: ${viewModel.pdfFile.value!!.absolutePath}")
+                //  viewModel.pdfFile.value!!.delete()
             }
         }
         if (this@HomeActivity::htmlFile.isInitialized) {
@@ -72,65 +87,56 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
                 htmlFile.delete()
             }
         }
-        var user:UserEntity=UserEntity("","","","","","","","")
-       if(viewModel.Users.value!=null && viewModel.Users.value!!.size>0){
-           user=viewModel.Users.value!!.get(0)
-       }
-        var edu:UserEducationEntity= UserEducationEntity(0,"","","","","")
-        if(viewModel.Users.value!=null && viewModel.Users.value!!.size>0){
-            edu=viewModel.UserEducation.value!!.get(0)
+        var user: UserEntity = UserEntity("", "", "", "", "", "", "", "")
+        if (viewModel.Users.value != null && viewModel.Users.value!!.size > 0) {
+            user = viewModel.Users.value!!.get(0)
         }
-        var history:UserHistoryEntity= UserHistoryEntity(0,"","","","","","","")
-        if(viewModel.UsersHistory.value!=null && viewModel.UsersHistory.value!!.size>0){
-            history=viewModel.UsersHistory.value!!.get(0)
+        var edu: UserEducationEntity = UserEducationEntity(0, "", "", "", "", "")
+        if (viewModel.Users.value != null && viewModel.Users.value!!.size > 0) {
+            edu = viewModel.UserEducation.value!!.get(0)
         }
-        var skill:UserSkillsEntity= UserSkillsEntity(0,"")
-        if(viewModel.UserSkills.value!=null && viewModel.UserSkills.value!!.size>0){
-            skill=viewModel.UserSkills.value!!.get(0)
+        var history: UserHistoryEntity = UserHistoryEntity(0, "", "", "", "", "", "", "")
+        if (viewModel.UsersHistory.value != null && viewModel.UsersHistory.value!!.size > 0) {
+            history = viewModel.UsersHistory.value!!.get(0)
         }
-        var summary:UserSummaryEntity= UserSummaryEntity(0,"")
-        if(  viewModel.UserSummary.value!=null && viewModel.UserSummary.value!!.size>0){
-            summary=viewModel.UserSummary.value!!.get(0)
+        var skill: UserSkillsEntity = UserSkillsEntity(0, "")
+        if (viewModel.UserSkills.value != null && viewModel.UserSkills.value!!.size > 0) {
+            skill = viewModel.UserSkills.value!!.get(0)
+        }
+        var summary: UserSummaryEntity = UserSummaryEntity(0, "")
+        if (viewModel.UserSummary.value != null && viewModel.UserSummary.value!!.size > 0) {
+            summary = viewModel.UserSummary.value!!.get(0)
         }
 
 
-        templateDefaultModel= TemplateDefaultModel(user = user!!,workhistory = history!!, userEducationEntity = edu!!,userSkillsEntity = skill!!, userSummaryEntity = summary!!)
+        templateDefaultModel = TemplateDefaultModel(
+            user = user!!,
+            workhistory = history!!,
+            userEducationEntity = edu!!,
+            userSkillsEntity = skill!!,
+            userSummaryEntity = summary!!
+        )
         val htmlText: String = fragmentPreviewInvoiceForInvoice()
 
-        Log.i("Invoice Converted", "hi-->$htmlText")
+        Log.e("Invoice Converted", "hi-->$htmlText")
         val htmlFilePath = saveHtmlTextToFile(htmlText)
 
-       GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(Dispatchers.Main) {
 //                Toast.makeText(context!!, "HTML Created", Toast.LENGTH_SHORT).show()
             createPdfFromHtml(htmlFilePath)
         }
     }
 
 
-
     @Suppress("DEPRECATION")
     fun createPdfFromHtml(htmlFile: File) {
-        Log.i("TAG", "createPdfFromHtml:Started...")
+        Log.e("TAG", "createPdfFromHtml:Started...")
 
-      lifecycleScope.launch(Dispatchers.Main) {
-          GlobalScope.async(Dispatchers.Main) {
-              pdfFileGenerationJob = GlobalScope.launch(Dispatchers.Main) {
-                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        viewModel.pdfFile.value =
+            File(context.filesDir.path, "/ResumeActualPDF.pdf")
+        Log.e("Tag", "createPdfFromHtml: ${viewModel.pdfFile.value!!.absolutePath}")
 
-                      viewModel.pdfFile.value = File(filesDir.toString() + "/", "ResumeActual.pdf")
-                      Log.i("Tag", "createPdfFromHtml: ${viewModel.pdfFile.value!!.absolutePath}")
-                  } else {
-                      Log.i("Tag", "createPdfFromHtml:2223333")
-
-                      viewModel.pdfFile.value = File(Environment.getExternalStorageDirectory().path.toString() + "/", "ResumeActual.pdf")
-                      Log.i("Tag", "createPdfFromHtml:2223 ${viewModel.pdfFile.value!!.absolutePath}")
-
-                  }
-
-              }
-          }.await()
-      }
-      //  Log.i("TAG", "createPdfFromHtml:124646 ${viewModel.pdfFile.value!!.absolutePath} ")
+        //  Log.e("TAG", "createPdfFromHtml:124646 ${viewModel.pdfFile.value!!.absolutePath} ")
         backgroundTaskList[3] = pdfFileGenerationJob
         previousJobAnalyser = GlobalScope.launch(Dispatchers.IO) {
 //            pdfFileGenerationJob!!.join()
@@ -140,15 +146,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
             }
             pdfGenerationJobFromWebView = GlobalScope.launch(Dispatchers.Unconfined) {
                 suspend {
-                    if(htmlFile!=null){
-                       if(viewModel.pdfFile.value!=null){
-                           converter!!.convert(htmlFile, viewModel.pdfFile.value!!)
-                       }
-                       else{
-                           Log.i("TAG", "createPdfFromHtml:3 ")
-                       }
-                    }else{
-                        Log.i("TAG", "createPdfFromHtml:2 ")
+                    if (viewModel.pdfFile.value != null) {
+                        converter!!.convert(htmlFile, viewModel.pdfFile.value!!)
+                    } else {
+                        Log.e("TAG", "createPdfFromHtml:3 ")
                     }
 
                 }.invoke()
@@ -165,8 +166,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
             if (pdfGenerationJobFromWebView != null) {
                 pdfGenerationJobFromWebView!!.join()
                 val fragment = PreviewFragment()
-               // fragment.getTemplatePreview(viewModel.pdfFile.value!!)
-                Log.i("TAG", "createPdfFromHtml: PDF generation completed..."+fragment)
+                // fragment.getTemplatePreview(viewModel.pdfFile.value!!)
+                Log.e("TAG", "createPdfFromHtml: PDF generation completed..." + fragment)
 
             } else {
                 createPdfFromHtml(htmlFile)
@@ -177,16 +178,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     @Suppress("DEPRECATION")
     private fun saveHtmlTextToFile(htmlText: String): File {
 
-        htmlFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            File(
-                context!!.filesDir.toString() + "/", "ResumeActual.html"
-            )
-        } else {
-            File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path.toString() + "/",
-                "ResumeActual.html"
-            )
-        }
+        htmlFile = File(context.filesDir.path, "/ResumeActual.html")
+
         try {
             val out = FileOutputStream(htmlFile)
             val data = htmlText.toByteArray()
@@ -202,8 +195,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     }
 
     private fun fragmentPreviewInvoiceForInvoice(): String {
-      var s=generateTemplate("1")
-        Log.i("TAG", "Gnerate tamplate : " + s)
+        var s = generateTemplate("1")
+        Log.e("TAG", "Gnerate tamplate : " + s)
         return s
     }
 
@@ -238,7 +231,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
         initSetting()
 
         viewModel = ViewModelProviders.of(this!!)[MainViewModel::class.java]
-        converter=PdfConverter.from(this){ error -> errorCommunication(error)}
+        converter = PdfConverter.from(this) { error -> errorCommunication(error) }
         invoiceCommunicationEditScreen()
 
         //RunTime Permission
@@ -293,18 +286,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     }
 
     private fun gotoSettingsScreen() {
-            val intent = Intent(
-                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.fromParts("package", packageName, null)
-            )
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", packageName, null)
+        )
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
 
     }
 
-    private fun errorCommunication(error:String)
-    {
-        Log.i("TAG", "errorCommunication:${error} ")
+    private fun errorCommunication(error: String) {
+        Log.e("TAG", "errorCommunication:${error} ")
         getPreview()
     }
 
@@ -370,8 +362,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 
-    override fun onPageSelected(position: Int)
-    {
+    override fun onPageSelected(position: Int) {
 //        ViewAnimation.initShowOut(dataBinding!!.)
 //        ViewAnimation.initShowOut(dataBinding!!.lytCall)
 
@@ -383,7 +374,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(),ClickHandler,ViewPager.
             if (fragment.view != null && !fragment.requireActivity().isFinishing) {
 //                fragment?.invoice_id=fragmentPreviewInvoiceForInvoice()?.toString()
 //                fragment?.invoice_id = invoice?.invoice_id.toString()
-                fragment.GetPdf()
+                fragment.getTemplatePreview(viewModel.pdfFile.value)
             }
 
         }
