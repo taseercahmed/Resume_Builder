@@ -1,36 +1,32 @@
-package com.semixtech.cv_resume_builder.helper
+package android.print;
 
 import android.annotation.TargetApi
 import android.content.Context
 import android.net.Uri
 import android.net.http.SslError
 import android.os.ParcelFileDescriptor
-import android.print.PageRange
-import android.print.PrintAttributes
-import android.print.PrintDocumentAdapter
-import android.print.PrintDocumentAdapter.*
 import android.util.Log
 import android.webkit.*
+import android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import android.print.PrintDocumentAdapter.WriteResultCallback
 
 @TargetApi(19)
 class PdfConverter @Inject constructor(
-    public val context: Context,
-    public val errorCommunication: (String) -> Unit
+    private val context: Context,
+    private val errorCommunication: (String) -> Unit
 ) {
 
     private val defaultPrintAttributes: PrintAttributes by lazy {
         PrintAttributes.Builder()
             .setMediaSize(PrintAttributes.MediaSize.NA_GOVT_LETTER)
-            .setResolution(PrintAttributes.Resolution("RESOLUTION_ID", "RESOLUTION_ID",
-                1600, 1600))
+            .setResolution(PrintAttributes.Resolution("RESOLUTION_ID", "RESOLUTION_ID", 1600, 1600))
             .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
             .build()
     }
@@ -123,20 +119,20 @@ class PdfConverter @Inject constructor(
 
         override fun onPageFinished(webview: WebView, url: String) {
 
-            CookieManager.getInstance().setAcceptThirdPartyCookies(webview, true);
+//            CookieManager.getInstance().setAcceptThirdPartyCookies(webview, true);
             webview.createPrintDocumentAdapter()?.run {
                 onLayout(
                     null,
                     printAttributes ?: defaultPrintAttributes,
                     null,
-                    object : LayoutResultCallback() {},
+                    object : PrintDocumentAdapter.LayoutResultCallback() {},
                     null
                 )
                 onWrite(
                     arrayOf(PageRange.ALL_PAGES),
                     file.outputFileDescriptor(),
                     null,
-                    object : WriteResultCallback() {
+                    object : PrintDocumentAdapter.WriteResultCallback() {
                         override fun onWriteCancelled() {
                             super.onWriteCancelled()
                             Log.e("PDF Converter", "onWriteCancelled")
